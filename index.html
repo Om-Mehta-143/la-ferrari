@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ferrari — Power, Perfected.</title>
+  <meta name="description" content="Experience the Ferrari legend. Power, precision, and passion — engineered to perfection. Configure your Ferrari today." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red: #CC0000;
+      --red-dark: #990000;
+      --red-light: #E60000;
+      --gold: #C9A74A;
+      --gold-light: #F5D98B;
+      --white: #FFFFFF;
+      --white-90: rgba(255,255,255,0.92);
+      --white-60: rgba(255,255,255,0.60);
+      --white-30: rgba(255,255,255,0.30);
+      --white-10: rgba(255,255,255,0.10);
+      --black: #0A0A0A;
+    }
+
+    html { scroll-behavior: auto; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif;
+      background: var(--red);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ─── NAVIGATION ─── */
+    #nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1000;
+      padding: 0 40px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(8, 0, 0, 0.0);
+      backdrop-filter: blur(0px) saturate(180%);
+      -webkit-backdrop-filter: blur(0px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.0);
+      transition: background 0.5s ease, backdrop-filter 0.5s ease, border-color 0.5s ease;
+    }
+    #nav.scrolled {
+      background: rgba(8, 0, 0, 0.72);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .nav-logo {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--white-90);
+      text-decoration: none;
+      flex-shrink: 0;
+      width: 120px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      list-style: none;
+    }
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      color: var(--white-60);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--white-90); }
+
+    .nav-cta {
+      flex-shrink: 0;
+      width: 180px;
+      display: flex;
+      justify-content: flex-end;
+    }
+    .nav-cta-btn {
+      font-size: 11.5px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      padding: 8px 18px;
+      border-radius: 20px;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: #1a0800;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s;
+      box-shadow: 0 2px 16px rgba(201,167,74,0.35);
+    }
+    .nav-cta-btn:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 6px 24px rgba(201,167,74,0.55);
+    }
+
+    /* ─── SCROLL CONTAINER ─── */
+    #scroll-wrapper {
+      position: relative;
+      height: 1200vh; /* long scroll = slower, cinematic pacing */
+    }
+
+    /* ─── STICKY CANVAS STAGE ─── */
+    #stage {
+      position: sticky;
+      top: 0;
+      width: 100%;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    #canvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* ─── OVERLAY COPY LAYERS ─── */
+    .copy-layer {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 120px 40px 80px;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .copy-layer.visible { opacity: 1; }
+
+    /* Phase 1: Curtains closed — teaser copy */
+    #copy-phase1 {
+      justify-content: flex-end;
+      padding-bottom: 120px;
+    }
+    #copy-phase1 .teaser-tag {
+      font-size: 11px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 14px;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.7s ease 0.1s, transform 0.7s ease 0.1s;
+    }
+    #copy-phase1.visible .teaser-tag {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    #copy-phase1 .teaser-hint {
+      font-size: 13px;
+      color: var(--white-30);
+      letter-spacing: 0.12em;
+      font-weight: 400;
+    }
+
+    /* Phase 2: Two Ferraris revealed — hero copy (right column, editorial) */
+    #copy-phase2 {
+      justify-content: center;    /* vertically centered */
+      align-items: flex-start;    /* override .copy-layer center */
+      text-align: left;
+      padding-left: 46%;          /* right of the tyre (~left 40% of frame) */
+      padding-right: 5%;
+      padding-bottom: 0;
+    }
+    #copy-phase2 .headline-rule {
+      width: 40px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 2px;
+      margin-bottom: 24px;
+      flex-shrink: 0;
+    }
+    #copy-phase2 .headline {
+      font-size: clamp(52px, 7vw, 100px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 0.92;
+      background: linear-gradient(170deg, #FFFFFF 0%, rgba(255,255,255,0.78) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 20px;
+    }
+    #copy-phase2 .subheadline {
+      font-size: clamp(10px, 1vw, 13px);
+      font-weight: 500;
+      letter-spacing: 0.32em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+    }
+
+    /* Phase 3: Ferrari drives off — motion copy */
+    #copy-phase3 { justify-content: center; }
+    #copy-phase3 .motion-label {
+      font-size: 11px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 20px;
+    }
+    #copy-phase3 .motion-headline {
+      font-size: clamp(44px, 7vw, 88px);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.0;
+      color: var(--white-90);
+      margin-bottom: 20px;
+    }
+    #copy-phase3 .motion-body {
+      font-size: clamp(14px, 1.6vw, 17px);
+      color: var(--white-60);
+      font-weight: 400;
+      max-width: 440px;
+      line-height: 1.7;
+      letter-spacing: 0.01em;
+    }
+
+    /* Phase 4 removed — tyre animation deleted */
+
+    /* Phase 5: Final CTA */
+    #copy-phase5 { justify-content: center; }
+    #copy-phase5 .final-headline {
+      font-size: clamp(32px, 5.5vw, 72px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: var(--white-90);
+      margin-bottom: 48px;
+      max-width: 700px;
+    }
+    .cta-group {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .cta-primary {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      padding: 18px 52px;
+      border-radius: 40px;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: #1a0800;
+      border: none;
+      cursor: pointer;
+      pointer-events: all;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      box-shadow: 0 4px 28px rgba(201,167,74,0.45);
+    }
+    .cta-primary:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 8px 40px rgba(201,167,74,0.65);
+    }
+    .cta-secondary {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      color: var(--white-60);
+      text-decoration: none;
+      pointer-events: all;
+      border-bottom: 1px solid rgba(255,255,255,0.25);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .cta-secondary:hover {
+      color: var(--white-90);
+      border-color: rgba(255,255,255,0.6);
+    }
+
+    /* ─── SCROLL INDICATOR ─── */
+    #scroll-indicator {
+      position: absolute;
+      bottom: 44px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 1;
+      transition: opacity 0.5s ease;
+      pointer-events: none;
+    }
+    #scroll-indicator.hidden { opacity: 0; }
+    .scroll-text {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--white-30);
+      font-weight: 500;
+    }
+    .scroll-arrow {
+      width: 1px;
+      height: 36px;
+      background: linear-gradient(to bottom, var(--white-30), transparent);
+      animation: scrollPulse 1.8s ease-in-out infinite;
+    }
+    @keyframes scrollPulse {
+      0%, 100% { transform: scaleY(1); opacity: 0.5; }
+      50% { transform: scaleY(1.3); opacity: 1; }
+    }
+
+    /* ─── POST-SCROLL SECTIONS ─── */
+    section.full-section {
+      min-height: 100vh;
+      background: var(--black);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 80px;
+    }
+
+    /* ─── LOADING SCREEN ─── */
+    #loader {
+      position: fixed;
+      inset: 0;
+      background: var(--red-dark);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+      transition: opacity 0.8s ease, visibility 0.8s ease;
+    }
+    #loader.done {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .loader-logo {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--white-90);
+    }
+    .loader-bar-track {
+      width: 240px;
+      height: 1px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    .loader-bar-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 2px;
+      transition: width 0.1s linear;
+    }
+    .loader-label {
+      font-size: 10px;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--white-30);
+    }
+
+    /* ─── NOISE GRAIN OVERLAY ─── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+      opacity: 0.025;
+      pointer-events: none;
+      z-index: 5000;
+    }
+
+    /* ══════════════════════════════════════════════
+       RICH CONTENT SECTIONS (post-canvas)
+    ══════════════════════════════════════════════ */
+
+    .site-section {
+      background: #0D0000;
+      color: var(--white);
+      padding: 120px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+    .site-section + .site-section {
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Section labels */
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 18px;
+    }
+    .section-title {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      line-height: 1.0;
+      color: var(--white-90);
+      margin-bottom: 20px;
+    }
+    .section-desc {
+      font-size: clamp(14px, 1.4vw, 16px);
+      color: var(--white-60);
+      line-height: 1.8;
+      max-width: 560px;
+      font-weight: 400;
+    }
+    .gold-rule {
+      width: 48px;
+      height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-light));
+      border-radius: 2px;
+      margin-bottom: 28px;
+    }
+
+    /* ── Performance Numbers ── */
+    #section-performance {
+      background: var(--red-dark);
+      padding: 90px 80px;
+    }
+    .perf-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2px;
+      margin-top: 60px;
+    }
+    .perf-card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      padding: 48px 36px;
+      text-align: center;
+      transition: background 0.3s ease;
+    }
+    .perf-card:hover { background: rgba(255,255,255,0.08); }
+    .perf-number {
+      font-size: clamp(52px, 7vw, 88px);
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      line-height: 1;
+      background: linear-gradient(135deg, #FFFFFF 0%, rgba(255,255,255,0.65) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .perf-unit {
+      font-size: 18px;
+      font-weight: 400;
+      -webkit-text-fill-color: rgba(255,255,255,0.4);
+      margin-left: 4px;
+    }
+    .perf-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-top: 14px;
+    }
+    .perf-sub {
+      font-size: 12px;
+      color: var(--white-30);
+      margin-top: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Engineering Cards ── */
+    #section-engineering { background: #0A0000; }
+    .eng-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 64px;
+      gap: 40px;
+    }
+    .eng-header-left { flex: 1; }
+    .eng-header-right {
+      flex: 0 0 360px;
+      font-size: 14px;
+      color: var(--white-60);
+      line-height: 1.8;
+      text-align: right;
+    }
+    .eng-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255,255,255,0.06);
+    }
+    .eng-card {
+      background: #0A0000;
+      padding: 48px 40px;
+      transition: background 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .eng-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 2px; height: 0;
+      background: linear-gradient(to bottom, var(--gold), var(--gold-light));
+      transition: height 0.4s ease;
+    }
+    .eng-card:hover::before { height: 100%; }
+    .eng-card:hover { background: #120000; }
+    .eng-icon {
+      font-size: 28px;
+      margin-bottom: 24px;
+      display: block;
+    }
+    .eng-card-title {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--white-90);
+      margin-bottom: 12px;
+    }
+    .eng-card-body {
+      font-size: 13.5px;
+      color: var(--white-60);
+      line-height: 1.75;
+      font-weight: 400;
+    }
+    .eng-card-tag {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      color: var(--gold);
+      border-bottom: 1px solid rgba(201,167,74,0.3);
+      padding-bottom: 2px;
+    }
+
+    /* ── Specs Table ── */
+    #section-specs { background: #080000; }
+    .specs-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      margin-top: 64px;
+    }
+    .specs-group-title {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.3em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 24px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .spec-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      gap: 20px;
+    }
+    .spec-key {
+      font-size: 13px;
+      color: var(--white-60);
+      font-weight: 400;
+      flex-shrink: 0;
+    }
+    .spec-val {
+      font-size: 14px;
+      color: var(--white-90);
+      font-weight: 600;
+      text-align: right;
+    }
+
+    /* ── Configure CTA ── */
+    #section-configure {
+      background: var(--red);
+      text-align: center;
+      padding: 140px 80px;
+    }
+    #section-configure .section-title {
+      font-size: clamp(42px, 6.5vw, 88px);
+      max-width: 800px;
+      margin: 0 auto 20px;
+    }
+    #section-configure .section-desc {
+      max-width: 500px;
+      margin: 0 auto 52px;
+      color: rgba(255,255,255,0.55);
+    }
+    .configure-btns {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .btn-gold {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      padding: 18px 52px;
+      border-radius: 40px;
+      text-decoration: none;
+      background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+      color: #1a0800;
+      border: none;
+      cursor: pointer;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      box-shadow: 0 4px 28px rgba(201,167,74,0.4);
+      display: inline-block;
+    }
+    .btn-gold:hover {
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 8px 40px rgba(201,167,74,0.65);
+    }
+    .btn-outline {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      padding: 17px 40px;
+      border-radius: 40px;
+      text-decoration: none;
+      border: 1px solid rgba(255,255,255,0.3);
+      color: var(--white-90);
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+      display: inline-block;
+    }
+    .btn-outline:hover {
+      border-color: rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.06);
+    }
+
+    /* ── Footer ── */
+    #site-footer {
+      background: #050000;
+      padding: 60px 80px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+    }
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+    .footer-brand {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--white-90);
+    }
+    .footer-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+    .footer-links a {
+      font-size: 12px;
+      color: var(--white-30);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      transition: color 0.2s;
+    }
+    .footer-links a:hover { color: var(--white-60); }
+    .footer-copy {
+      font-size: 11px;
+      color: var(--white-30);
+      letter-spacing: 0.05em;
+    }
+
+    /* Scroll reveal animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .reveal.in-view {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- LOADER -->
+  <div id="loader">
+    <div class="loader-logo">Ferrari</div>
+    <div class="loader-bar-track">
+      <div class="loader-bar-fill" id="loader-fill"></div>
+    </div>
+    <div class="loader-label" id="loader-label">Loading experience…</div>
+  </div>
+
+  <!-- NAV -->
+  <nav id="nav" role="navigation" aria-label="Ferrari main navigation">
+    <a class="nav-logo" href="#" id="nav-logo">Ferrari</a>
+    <ul class="nav-links" role="list">
+      <li><a href="#overview" id="nav-overview">Overview</a></li>
+      <li><a href="#engineering" id="nav-engineering">Engineering</a></li>
+      <li><a href="#performance" id="nav-performance">Performance</a></li>
+      <li><a href="#specs" id="nav-specs">Specs</a></li>
+      <li><a href="#configure" id="nav-configure">Configure</a></li>
+    </ul>
+    <div class="nav-cta">
+      <a class="nav-cta-btn" href="#configure" id="nav-cta-btn">Experience Ferrari</a>
+    </div>
+  </nav>
+
+  <!-- SCROLL WRAPPER -->
+  <div id="scroll-wrapper">
+    <div id="stage">
+      <canvas id="canvas"></canvas>
+
+      <!-- COPY LAYERS -->
+      <!-- Phase 1: Curtains -->
+      <div class="copy-layer" id="copy-phase1">
+        <div class="teaser-tag">A Legend Awaits</div>
+        <div class="teaser-hint">↓ Scroll to reveal</div>
+      </div>
+
+      <!-- Phase 2: Grand Reveal -->
+      <div class="copy-layer" id="copy-phase2">
+        <div class="headline-rule"></div>
+        <h1 class="headline">Ferrari.</h1>
+        <p class="subheadline">Power, perfected.</p>
+      </div>
+
+      <!-- Phase 3: Ferrari Drives -->
+      <div class="copy-layer" id="copy-phase3">
+        <div class="motion-label">Zero Compromise</div>
+        <h2 class="motion-headline">Engineered<br>to move.</h2>
+        <p class="motion-body">Every revolution is a statement. Every straight a crescendo. Precision-engineered to transform speed into pure sensation.</p>
+      </div>
+
+
+
+      <!-- Phase 5: CTA -->
+      <div class="copy-layer" id="copy-phase5">
+        <h2 class="final-headline">Feel everything.<br>Forget everything else.</h2>
+        <div class="cta-group">
+          <a class="cta-primary" href="#configure" id="cta-configure">Configure Your Ferrari</a>
+          <a class="cta-secondary" href="#specs" id="cta-specs">See full specs</a>
+        </div>
+      </div>
+
+      <!-- Scroll indicator -->
+      <div id="scroll-indicator">
+        <div class="scroll-text">Scroll</div>
+        <div class="scroll-arrow"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       RICH CONTENT SECTIONS
+  ══════════════════════════════════ -->
+
+  <!-- PERFORMANCE NUMBERS -->
+  <section class="site-section" id="section-performance">
+    <div class="reveal">
+      <div class="section-label">By the Numbers</div>
+      <div class="section-title">Built for extremes.</div>
+    </div>
+    <div class="perf-grid">
+      <div class="perf-card reveal">
+        <div class="perf-number">640<span class="perf-unit">cv</span></div>
+        <div class="perf-label">Engine Output</div>
+        <div class="perf-sub">3.9L V8 Twin-Turbo</div>
+      </div>
+      <div class="perf-card reveal">
+        <div class="perf-number">2.9<span class="perf-unit">s</span></div>
+        <div class="perf-label">0–100 km/h</div>
+        <div class="perf-sub">Launch Control Active</div>
+      </div>
+      <div class="perf-card reveal">
+        <div class="perf-number">330<span class="perf-unit">km/h</span></div>
+        <div class="perf-label">Top Speed</div>
+        <div class="perf-sub">Electronically governed</div>
+      </div>
+      <div class="perf-card reveal">
+        <div class="perf-number">1470<span class="perf-unit">kg</span></div>
+        <div class="perf-label">Dry Weight</div>
+        <div class="perf-sub">Carbon fibre chassis</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ENGINEERING CARDS -->
+  <section class="site-section" id="section-engineering">
+    <div class="eng-header">
+      <div class="eng-header-left reveal">
+        <div class="gold-rule"></div>
+        <div class="section-label">Ferrari Engineering</div>
+        <h2 class="section-title">Where obsession<br>becomes precision.</h2>
+      </div>
+      <div class="eng-header-right reveal">
+        Every Ferrari is the result of thousands of engineering hours, wind tunnel testing, and a relentless pursuit of the perfect balance between raw power and surgical control.
+      </div>
+    </div>
+    <div class="eng-grid">
+      <div class="eng-card reveal">
+        <span class="eng-icon">⚙️</span>
+        <div class="eng-card-title">Twin-Turbo V8 Architecture</div>
+        <div class="eng-card-body">Ferrari's 3.9-litre twin-turbocharged V8 produces 640cv at 7,500rpm — a masterclass in forced induction, delivering relentless torque from as low as 3,000rpm without a hint of lag.</div>
+        <span class="eng-card-tag">Powertrain</span>
+      </div>
+      <div class="eng-card reveal">
+        <span class="eng-icon">🏎️</span>
+        <div class="eng-card-title">Side-Slip Control 6.1</div>
+        <div class="eng-card-body">The latest generation SSC 6.1 system reads 100 vehicle parameters per second, distributing torque between axles in real time to keep the car pinned to the driver's intended line.</div>
+        <span class="eng-card-tag">Dynamics</span>
+      </div>
+      <div class="eng-card reveal">
+        <span class="eng-icon">🪶</span>
+        <div class="eng-card-title">Carbon Fibre Everywhere</div>
+        <div class="eng-card-body">From the roof panel and rear diffuser to the seat shells and dashboard spine — every gram of carbon fibre is laid by hand, achieving structural rigidity that no metal substitute can match.</div>
+        <span class="eng-card-tag">Lightweight</span>
+      </div>
+      <div class="eng-card reveal">
+        <span class="eng-icon">🌬️</span>
+        <div class="eng-card-title">Aerodynamic Intelligence</div>
+        <div class="eng-card-body">Ferrari's active aerodynamic package generates up to 360kg of downforce at 200km/h. Adaptive flaps and sculpted underbody channels work in concert — invisible forces that keep you planted.</div>
+        <span class="eng-card-tag">Aero</span>
+      </div>
+      <div class="eng-card reveal">
+        <span class="eng-icon">🔊</span>
+        <div class="eng-card-title">The Sound of Maranello</div>
+        <div class="eng-card-body">The exhaust note is engineered as meticulously as the engine itself. Titanium headers, tuned resonance chambers, and a flat-plane crankshaft produce a wail that is unmistakably, irreversibly Ferrari.</div>
+        <span class="eng-card-tag">Experience</span>
+      </div>
+      <div class="eng-card reveal">
+        <span class="eng-icon">🖥️</span>
+        <div class="eng-card-title">Ferrari Digital Interface</div>
+        <div class="eng-card-body">A 16-inch curved driver display and 8-inch passenger screen deliver telemetry, navigation, and entertainment — all designed so the driver's eyes never have to leave the horizon.</div>
+        <span class="eng-card-tag">Technology</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- FULL SPECS -->
+  <section class="site-section" id="section-specs">
+    <div class="reveal">
+      <div class="gold-rule"></div>
+      <div class="section-label">Technical Specifications</div>
+      <h2 class="section-title">Every number tells<br>a story.</h2>
+    </div>
+    <div class="specs-layout">
+      <div>
+        <div class="specs-group-title reveal">Engine &amp; Performance</div>
+        <div class="spec-row reveal"><span class="spec-key">Engine Type</span><span class="spec-val">3.9L V8 Twin-Turbo</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Max Power</span><span class="spec-val">640 cv @ 7,500 rpm</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Max Torque</span><span class="spec-val">760 Nm @ 3,000 rpm</span></div>
+        <div class="spec-row reveal"><span class="spec-key">0–100 km/h</span><span class="spec-val">2.9 seconds</span></div>
+        <div class="spec-row reveal"><span class="spec-key">0–200 km/h</span><span class="spec-val">7.9 seconds</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Top Speed</span><span class="spec-val">&gt; 330 km/h</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Gearbox</span><span class="spec-val">8-speed dual-clutch DCT</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Drive</span><span class="spec-val">Rear-wheel drive</span></div>
+      </div>
+      <div>
+        <div class="specs-group-title reveal">Dimensions &amp; Chassis</div>
+        <div class="spec-row reveal"><span class="spec-key">Length</span><span class="spec-val">4,568 mm</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Width</span><span class="spec-val">1,979 mm</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Height</span><span class="spec-val">1,300 mm</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Wheelbase</span><span class="spec-val">2,650 mm</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Dry Weight</span><span class="spec-val">1,470 kg</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Weight Distribution</span><span class="spec-val">41% front / 59% rear</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Front Tyres</span><span class="spec-val">245/35 ZR20</span></div>
+        <div class="spec-row reveal"><span class="spec-key">Rear Tyres</span><span class="spec-val">305/30 ZR20</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONFIGURE CTA -->
+  <section class="site-section" id="section-configure">
+    <div class="reveal">
+      <div class="section-label" style="margin-bottom:24px;">Your Ferrari Awaits</div>
+      <h2 class="section-title">Make it yours.<br>Make it legendary.</h2>
+      <p class="section-desc">Every Ferrari is a bespoke creation. Choose your colour, interior, wheels, and personalisation options — crafted to order in Maranello.</p>
+    </div>
+    <div class="configure-btns reveal">
+      <a class="btn-gold" href="https://www.ferrari.com/en-EN/auto" target="_blank" id="configure-btn-main">Build Your Ferrari</a>
+      <a class="btn-outline" href="https://www.ferrari.com/en-EN/dealers" target="_blank" id="configure-btn-dealer">Find a Dealer</a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer id="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">Ferrari</div>
+      <ul class="footer-links">
+        <li><a href="https://www.ferrari.com" target="_blank">Ferrari.com</a></li>
+        <li><a href="#section-specs">Specifications</a></li>
+        <li><a href="#section-engineering">Engineering</a></li>
+        <li><a href="#section-configure">Configure</a></li>
+      </ul>
+      <div class="footer-copy">© 2024 Ferrari S.p.A. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script>
+  // ── Scroll Reveal Observer ──
+  const revealEls = document.querySelectorAll('.reveal');
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealEls.forEach(el => revealObserver.observe(el));
+
+
+  (() => {
+    'use strict';
+
+    /* ═══════════════════════════════════════
+       CONSTANTS
+    ═══════════════════════════════════════ */
+    const TOTAL_FRAMES = 240;
+    const FRAME_PATH = (i) =>
+      `ezgif-6ab9a5236c856359-png-split/ezgif-frame-${String(i).padStart(3,'0')}.png`;
+
+    const PHASES = {
+      CURTAIN:  [0.00, 0.15],
+      REVEAL:   [0.15, 0.50],
+      DRIVE:    [0.50, 0.80],
+      FINAL:    [0.80, 1.00],
+    };
+
+    /* ═══════════════════════════════════════
+       CANVAS SETUP  (DPR-aware for crisp rendering)
+    ═══════════════════════════════════════ */
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H; // logical CSS pixels
+
+    function resizeCanvas() {
+      const dpr = window.devicePixelRatio || 1;
+      W = window.innerWidth;
+      H = window.innerHeight;
+      // Physical pixel dimensions
+      canvas.width  = Math.round(W * dpr);
+      canvas.height = Math.round(H * dpr);
+      // CSS dimensions stay logical
+      canvas.style.width  = W + 'px';
+      canvas.style.height = H + 'px';
+      // Scale all drawing ops by DPR so everything is sharp
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+    window.addEventListener('resize', () => { resizeCanvas(); renderFrame(); });
+    resizeCanvas();
+
+    /* ═══════════════════════════════════════
+       IMAGE PRELOADER
+    ═══════════════════════════════════════ */
+    const frames = new Array(TOTAL_FRAMES).fill(null);
+    let loadedCount = 0;
+    const loaderFill  = document.getElementById('loader-fill');
+    const loaderLabel = document.getElementById('loader-label');
+    const loaderEl    = document.getElementById('loader');
+
+    function preloadFrames() {
+      return new Promise((resolve) => {
+        let completed = 0;
+        for (let i = 1; i <= TOTAL_FRAMES; i++) {
+          const img = new Image();
+          img.onload = img.onerror = () => {
+            completed++;
+            loadedCount = completed;
+            const pct = Math.round((completed / TOTAL_FRAMES) * 100);
+            loaderFill.style.width = pct + '%';
+            if (pct < 100) {
+              loaderLabel.textContent = `Loading ${pct}%`;
+            } else {
+              loaderLabel.textContent = 'Ready';
+              setTimeout(resolve, 300);
+            }
+          };
+          img.src = FRAME_PATH(i);
+          frames[i - 1] = img;
+        }
+      });
+    }
+
+    /* ═══════════════════════════════════════
+       SCROLL STATE
+    ═══════════════════════════════════════ */
+    let scrollProgress = 0; // 0–1
+
+    function getScrollProgress() {
+      const wrapper = document.getElementById('scroll-wrapper');
+      const scrollTop = window.scrollY;
+      const maxScroll = wrapper.scrollHeight - window.innerHeight;
+      return Math.min(Math.max(scrollTop / maxScroll, 0), 1);
+    }
+
+    function inPhase(progress, phase) {
+      const [s, e] = PHASES[phase];
+      return progress >= s && progress <= e;
+    }
+
+    function phaseT(progress, phase) {
+      // returns 0–1 within a phase
+      const [s, e] = PHASES[phase];
+      return Math.min(Math.max((progress - s) / (e - s), 0), 1);
+    }
+
+    /* ═══════════════════════════════════════
+       EASING
+    ═══════════════════════════════════════ */
+    const easeInOut = t => t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+    const easeOut   = t => 1 - Math.pow(1-t, 3);
+    const easeIn    = t => t * t * t;
+
+
+
+    /* ═══════════════════════════════════════
+       DRAW FUNCTIONS
+    ═══════════════════════════════════════ */
+
+    // Draw a frame centred/cover-fit on canvas
+    function drawFrame(frameIndex, alpha = 1, dx = 0, dy = 0, scale = 1) {
+      const img = frames[Math.min(Math.max(frameIndex, 0), TOTAL_FRAMES - 1)];
+      if (!img || !img.complete || img.naturalWidth === 0) return;
+
+      ctx.save();
+      ctx.globalAlpha = alpha;
+
+      const imgW = img.naturalWidth;
+      const imgH = img.naturalHeight;
+
+      // cover-fit
+      const imgAspect = imgW / imgH;
+      const canAspect = W / H;
+      let drawW, drawH;
+      if (imgAspect > canAspect) {
+        drawH = H;
+        drawW = H * imgAspect;
+      } else {
+        drawW = W;
+        drawH = W / imgAspect;
+      }
+      const baseX = (W - drawW) / 2;
+      const baseY = (H - drawH) / 2;
+
+      ctx.translate(W/2, H/2);
+      ctx.scale(scale, scale);
+      ctx.translate(-W/2, -H/2);
+      ctx.translate(dx, dy);
+      ctx.drawImage(img, baseX, baseY, drawW, drawH);
+      ctx.restore();
+    }
+
+    function fillBg(color = '#CC0000') {
+      ctx.fillStyle = color;
+      ctx.fillRect(0, 0, W, H);
+    }
+
+    // drawCurtains removed — real curtain footage used from video frames
+
+
+
+    /* ═══════════════════════════════════════
+       MAIN RENDER
+    ═══════════════════════════════════════ */
+    function renderFrame() {
+      const p = scrollProgress;
+      ctx.clearRect(0, 0, W, H);
+
+      // ─── PHASES 1+2: Curtain → Reveal (0–50%) — seamless frame scrub ───
+      // Both phases are ONE continuous video playback across frames 0-239.
+      // No hand-drawn curtains — the real curtain footage transitions naturally.
+      if (p < PHASES.REVEAL[1] + 0.01) {
+        fillBg('#CC0000');
+
+        // Map the full 0–50% scroll range across all 240 frames with a
+        // gentle ease-out so curtain opening feels slow and reveal lingers.
+        const combinedT = p / PHASES.REVEAL[1]; // 0→1 across the 0–50% window
+        const easedT = easeOut(combinedT);       // slow start, faster curtain pull
+        const frameIndex = Math.floor(easedT * (TOTAL_FRAMES - 1));
+        drawFrame(frameIndex);
+        return;
+      }
+
+      // ─── PHASE 3: Drive Off (50–80%) — slow cinematic exit ───
+      if (p < PHASES.DRIVE[1] + 0.02) {
+        fillBg('#CC0000');
+        const t = phaseT(p, 'DRIVE');
+        // Gentle ease — car moves slowly at first, smoothly accelerates
+        const tSlowEase = t < 0.5
+          ? 2 * t * t * t          // very slow start
+          : 1 - Math.pow(-2*t+2, 3) / 2; // smooth finish
+
+        // Stay on a mid-reveal frame showing both Ferraris
+        const baseFrame = Math.floor(0.72 * (TOTAL_FRAMES - 1));
+        drawFrame(baseFrame, 1, 0, 0, 1);
+
+        if (t > 0.04) {
+          // Right Ferrari fades out gracefully over the first 60% of the phase
+          const rightFade = 1 - easeInOut(Math.min(t / 0.6, 1));
+          if (rightFade > 0.01) {
+            drawFrame(baseFrame, rightFade * 0.75, 0, 0, 1);
+          }
+
+          // Left Ferrari slides rightward using slow ease — exits fully by t=1
+          const leftCarX = tSlowEase * (W + 250);
+          ctx.save();
+          ctx.globalAlpha = Math.min(t * 5, 1); // fade in the moving copy quickly
+          ctx.translate(leftCarX * 0.5, 0); // half offset feels more natural for one-car exit
+          drawFrame(baseFrame, 0.92, 0, 0, 1);
+          ctx.restore();
+
+          // Gradient mask to erase trailing duplicate on the right
+          const maskGrad = ctx.createLinearGradient(0, 0, W, 0);
+          maskGrad.addColorStop(0,   'rgba(204,0,0,0)');
+          maskGrad.addColorStop(0.55,'rgba(204,0,0,0.35)');
+          maskGrad.addColorStop(1,   '#CC0000');
+          ctx.save();
+          ctx.globalAlpha = easeInOut(t);
+          ctx.fillStyle = maskGrad;
+          ctx.fillRect(0, 0, W, H);
+          ctx.restore();
+        }
+        return;
+      }
+
+      // ─── PHASE 4: Final CTA (80–100%) ───
+      {
+        fillBg('#CC0000');
+        const t = phaseT(p, 'FINAL');
+
+        // Subtle vignette
+        const vigGrad = ctx.createRadialGradient(W/2, H/2, 0, W/2, H/2, W * 0.8);
+        vigGrad.addColorStop(0,   'rgba(204,0,0,0)');
+        vigGrad.addColorStop(0.6, 'rgba(150,0,0,0.2)');
+        vigGrad.addColorStop(1,   'rgba(80,0,0,0.7)');
+        ctx.fillStyle = vigGrad;
+        ctx.fillRect(0, 0, W, H);
+
+        // Gold accent lines
+        ctx.save();
+        ctx.globalAlpha = 0.12 + t * 0.08;
+        const lineGrad1 = ctx.createLinearGradient(0, H*0.4, W, H*0.4);
+        lineGrad1.addColorStop(0, 'transparent');
+        lineGrad1.addColorStop(0.3, 'rgba(201,167,74,0.6)');
+        lineGrad1.addColorStop(0.7, 'rgba(201,167,74,0.6)');
+        lineGrad1.addColorStop(1, 'transparent');
+        ctx.fillStyle = lineGrad1;
+        ctx.fillRect(0, H*0.4 - 0.5, W, 1);
+        ctx.fillRect(0, H*0.6 - 0.5, W, 1);
+        ctx.restore();
+      }
+    }
+
+    /* ═══════════════════════════════════════
+       COPY LAYER VISIBILITY
+    ═══════════════════════════════════════ */
+    const copyPhase1 = document.getElementById('copy-phase1');
+    const copyPhase2 = document.getElementById('copy-phase2');
+    const copyPhase3 = document.getElementById('copy-phase3');
+    const copyPhase5 = document.getElementById('copy-phase5');
+    const scrollIndicator = document.getElementById('scroll-indicator');
+    const navEl = document.getElementById('nav');
+
+    function updateCopyLayers(p) {
+      // Phase 1: 0–15%
+      copyPhase1.classList.toggle('visible', p < 0.13);
+
+      // Phase 2: Reveal (15–50%)  — show from 18% to 48%
+      copyPhase2.classList.toggle('visible', p >= 0.18 && p < 0.48);
+
+      // Phase 3: Drive (50–80%)  — show from 52% to 78%
+      copyPhase3.classList.toggle('visible', p >= 0.52 && p < 0.78);
+
+      // Phase 4 (tyre) removed
+
+      // Final CTA (80–100%) — fade in at 82%
+      copyPhase5.classList.toggle('visible', p >= 0.82);
+
+      // Scroll indicator
+      scrollIndicator.classList.toggle('hidden', p > 0.06);
+
+      // Nav appearance
+      navEl.classList.toggle('scrolled', p > 0.03);
+    }
+
+    /* ═══════════════════════════════════════
+       SCROLL HANDLER
+    ═══════════════════════════════════════ */
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(() => {
+          scrollProgress = getScrollProgress();
+          renderFrame();
+          updateCopyLayers(scrollProgress);
+          ticking = false;
+        });
+        ticking = true;
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    /* ═══════════════════════════════════════
+       NAV BUTTON SCROLL WIRING
+    ═══════════════════════════════════════ */
+    function scrollToProgress(p) {
+      const wrapper = document.getElementById('scroll-wrapper');
+      const maxScroll = wrapper.scrollHeight - window.innerHeight;
+      window.scrollTo({ top: Math.round(p * maxScroll), behavior: 'smooth' });
+    }
+
+    // Wire all hash links — nav + in-page CTAs
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        const hash = link.getAttribute('href').replace('#', '');
+        
+        // If clicking the logo, scroll to very top
+        if (hash === '') {
+          e.preventDefault();
+          scrollToProgress(0);
+          return;
+        }
+
+        // 'overview' scrolls to the start of the canvas experience
+        if (hash === 'overview') {
+          e.preventDefault();
+          scrollToProgress(0);
+          return;
+        }
+
+        // Try to find an actual section in the document
+        const targetSection = document.getElementById(`section-${hash}`) || document.getElementById(hash);
+        if (targetSection) {
+          e.preventDefault();
+          targetSection.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+
+    /* ═══════════════════════════════════════
+       INIT: LOAD → HIDE LOADER → START
+    ═══════════════════════════════════════ */
+    preloadFrames().then(() => {
+      loaderEl.classList.add('done');
+      renderFrame();
+      updateCopyLayers(0);
+    });
+
+  })();
+  </script>
+</body>
+</html>
