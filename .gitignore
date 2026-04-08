@@ -3,8 +3,8 @@
 *.zip
 *.pdf
 
-# Directory with split PNGs (likely large and derivative)
-ezgif-6ab9a5236c856359-png-split/
+# Directory with split PNGs - ESSENTIAL for curtain and Ferrari reveals
+# ezgif-6ab9a5236c856359-png-split/
 
 # OS files
 .DS_Store
